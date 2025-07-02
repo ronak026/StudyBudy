@@ -1,0 +1,1 @@
+StudyBuddy is a Django-based web application for students to create, join, and participate in study rooms, chat with peers, and manage their study activities. The platform includes user authentication, profile management, and an admin panel for site management.
