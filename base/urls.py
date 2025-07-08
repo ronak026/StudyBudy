@@ -4,7 +4,7 @@
 
 from django.urls import path,include
 from . import views
-from .views import myview
+# from .views import myview
 # from rest_framework.routers import DefaultRouter
 # from .views import LoginViewSet
 
@@ -39,8 +39,9 @@ urlpatterns = [
     
     
     path('update-user/',views.updateUser, name='update-user'),
+    path('topic/',views.topic_room, name='topic'),
+    path('activity/',views.activityPage, name='activity'),
     
-    path('topic-room/',views.topic_room, name='topic-room'),
-    path('myview/', myview.as_view(), name='my-view'),
+    # path('myview/', myview.as_view(), name='my-view'),
     # path('', Home.as_view(), name='home'),
 ]

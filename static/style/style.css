@@ -419,21 +419,28 @@ a {
 .layout--2 > .container > div:last-child {
   flex-basis: 25%;
 }
+
+
 /*========== Layout Box ==========*/
 
 .layout__box {
   width: 90%;
   max-width: 48rem;
   min-height: 40rem;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -46%);
+  /* Remove absolute positioning and centering */
+  /* position: absolute; */
+  /* top: 50%; */
+  /* left: 50%; */
+  /* transform: translate(-50%, -46%); */
   background-color: var(--color-dark);
   border-radius: 1rem;
   box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  margin: 3rem auto 2rem auto; /* Add margin-top for spacing below navbar, center horizontally */
+  display: flex;
+  flex-direction: column;
 }
+
 
 .layout__boxHeader {
   display: flex;
@@ -1162,4 +1169,65 @@ a {
   font-weight: 500;
   color: var(--color-main);
   font-weight: 1.4rem;
+}
+
+/* Modern Pagination Styles */
+.modern-pagination {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+.modern-pagination__list {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+.modern-pagination__item { }
+.modern-pagination__link, .modern-pagination__current {
+  display: block;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  background: var(--color-dark-light);
+  color: var(--color-light);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: none;
+}
+.modern-pagination__link:hover {
+  background: var(--color-main);
+  color: var(--color-dark);
+  box-shadow: 0 4px 16px rgba(113,198,221,0.15);
+}
+.modern-pagination__current {
+  background: var(--color-main);
+  color: var(--color-dark);
+  cursor: default;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(113,198,221,0.15);
+}
+@media (max-width: 600px) {
+  .modern-pagination__link, .modern-pagination__current {
+    padding: 0.5rem 1rem;
+    font-size: 1.3rem;
+  }
+  .modern-pagination__list {
+    gap: 0.2rem;
+  }
+}
+
+/* Show only 4 activities in recent activity, scroll for more */
+.show-4-activities {
+  max-height: 65rem; /* Adjust if needed for your activity box height */
+  overflow-y: auto;
+}
+.show-4-activities::-webkit-scrollbar {
+  width: 0.6rem;
+  background-color: rgb(41, 41, 46);
+}
+.show-4-activities::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  background-color: var(--color-gray);
 }

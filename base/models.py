@@ -2,10 +2,18 @@
 # user logins.
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
-
+class User(AbstractUser):
+    name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(unique=True, null=True)
+    bio=models.TextField(null=True)
+    
+    avatar=models.ImageField(null=True, default="luffy.jpg")
+    
+    USERNAME_FIELD='email'
+    REQUIRED_FIELDS=[]
 
 class Room(models.Model):
     host=models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -46,13 +54,13 @@ class Message(models.Model):
         return self.body[0:50]
     
     
-class Login(models.Model):
-    name= models.CharField(max_length=200)  
-    email= models.EmailField(max_length=30)
-    password= models.CharField(max_length=8)
+# class Login(models.Model):
+#     name= models.CharField(max_length=200)  
+#     email= models.EmailField(max_length=30)
+#     password= models.CharField(max_length=8)
     
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
     
 # class Register(models.Model):
 #     username= models.CharField(max_length=100)

@@ -5,60 +5,37 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="{% static 'base/assets/favicon.ico' %}"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="{% static 'style/style.css' %}" />
     <title>StudyBuddy - Find study partners around the world!</title>
   </head>
 
   <body>
-
-    {% include 'negbr.html' %}
-
-        {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-
-      {% comment %} <li {% if message.tags %}class="{{ message.tags }}" {% endif %}>
-        {{ message }}
-      </li> {% endcomment %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %} 
-    {% block start %} 
-
-
-    {% endblock %}
+    <div class="site-wrapper">
+      {% include 'negbr.html' %} 
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %} 
+      <script>
+        window.addEventListener("DOMContentLoaded", function () {
+          const popups = document.querySelectorAll(".popup-message");
+          popups.forEach(function (popup) {
+            setTimeout(() => {
+              popup.style.display = "none";
+            }, 3000); // Hide after 3 seconds
+          });
+        });
+      </script>
+      <div class="main-content">{% block start %}{% endblock %}</div>
+    </div>
     <script src="{% static 'js/script.js' %}"></script>
   </body>
 </html>
-
-
-{% comment %} {% comment %} {% load static  %}
-<html>
-  <head>
-    <title>Study Bud</title>
-    {% block style %} {% endblock %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style/main.css' %}">
-  </head>
-
-  <body>
-    {% include 'negbr.html' %}
-    
-    {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-
-      <li {% if message.tags %}class="{{ message.tags }}" {% endif %}>
-        {{ message }}
-      </li>
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %} 
-    
-
-    {% block start %} 
-    {% endblock %}
-  </body>
-</html> {% endcomment %}

@@ -12,12 +12,10 @@
         <div class="profile">
           <div class="profile__avatar">
             <div class="avatar avatar--large active">
-              <img src="https://randomuser.me/api/portraits/men/11.jpg" />
+              <img src="{{p_user.avatar.url}}" />
             </div>
           </div>
           <div class="profile__info">
-            <!-- <h3>{{user.username}}</h3>
-            <p>@{{user.username}}</p> -->
             <h3>{{p_user.username}}</h3>
             <p>@{{p_user.username}}</p>
             {% if request.user == p_user %}
@@ -25,19 +23,14 @@
           {% endif %}
           </div>
           <div class="profile__about">
-            <h3>About</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur illo tenetur
-              facilis sunt nemo debitis quisquam hic atque aut? Ducimus alias placeat optio
-              accusamus repudiandae quis ab ex exercitationem rem?
-            </p>
+            <h3>Bio</h3>
+            <p>{{p_user.bio}}</p>
           </div>
         </div>
 
         <div class="roomList__header">
           <div>
-            <h2>Study Rooms Hosted by dennis_ivy</a>
-            </h2>
+            <h2>Study Rooms Hosted by {{p_user.name}}</h2>
           </div>
         </div>
         {% include 'base/feed_component.html' %}
@@ -46,7 +39,7 @@
       <!-- Room List End -->
 
       <!-- Activities Start -->
- {% include 'base/activity_component.html' %}
+      {% include 'base/activity_component.html' %}
       <!-- Activities End -->
     </div>
   </main>

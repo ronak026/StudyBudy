@@ -1,18 +1,13 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Login,Room,Topic,Message
-from django.contrib.auth.models import User
+from .models import Room,Topic,Message,User
+from django.contrib.auth.forms import UserCreationForm
 
-class RegisterForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, max_length=8)
+class MyUserCreationForm(UserCreationForm):
     
     class Meta:
-        model = Login
-        fields = ['name', 'email', 'password']
-
-class LoginForm(forms.Form):
-    email = forms.EmailField(max_length=30)
-    password = forms.CharField(widget=forms.PasswordInput, max_length=8)
+        model=User
+        fields = ['name','username','email','password1','password2']
 
 class RoomForm(ModelForm):
     
@@ -24,7 +19,7 @@ class RoomForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username','email']
+        fields = ['avatar','username','name','email','bio']
         
 class TopicForm(ModelForm):
     
