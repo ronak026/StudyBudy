@@ -1,4 +1,4 @@
-# StudyBud
+# StudyBudy
 
 StudyBud is a Django-based web application designed for collaborative learning and community discussions. Users can create rooms based on topics, join conversations, send messages, and connect with other learners.
 
