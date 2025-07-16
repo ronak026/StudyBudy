@@ -16,14 +16,23 @@
 
   <body>
     <div class="site-wrapper">
-      {% include 'negbr.html' %} 
-      {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %} 
+      {% include 'negbr.html' %} {% if messages %}
+      <div id="popup-message" class="custom-modal show">
+        <div class="custom-modal-content">
+          {% for message in messages %}
+          <p>{{ message }}</p>
+          {% endfor %}
+          <button class="custom-modal-close" onclick="closeModal()">
+            Close
+          </button>
+        </div>
+      </div>
+      <script>
+        function closeModal() {
+          document.getElementById("popup-message").style.display = "none";
+        }
+      </script>
+      {% endif %}
       <script>
         window.addEventListener("DOMContentLoaded", function () {
           const popups = document.querySelectorAll(".popup-message");

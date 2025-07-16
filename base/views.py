@@ -11,7 +11,7 @@
 """
 
 from django.http import HttpResponse
-from .models import Room, Topic, Message,User
+from .models import Room, Topic, Message, User
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
@@ -22,7 +22,6 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .forms import RoomForm, TopicForm, UserForm, MyUserCreationForm
 from django.core.paginator import Paginator
-
 
 
 def login_page(request):
@@ -120,7 +119,7 @@ def room(request, pk):
     if request.method == "POST":
         if not request.user.is_authenticated:
             messages.error(request, "You are not logged in.")
-            return redirect("login")
+            return redirect("room", pk=room.id)
 
         Message.objects.create(
             user=request.user, room=room, body=request.POST.get("body")
@@ -172,6 +171,9 @@ def create_room(request):
         #     room.host=request.user
         #     room.save()
         return redirect("home")
+    if not request.user.is_authenticated:
+        messages.error(request, "You are not logged in!")
+        return redirect("home")
 
     context = {"form": form, "topics": topics}
     return render(request, "base/room_form.html", context)
@@ -198,8 +200,7 @@ def updateRoom(request, pk):
     context = {"form": form, "topics": topics, "room": room}
     return render(request, "base/room_form.html", context)
 
-
-# def topic_old(request):
+    # def topic_old(request):
     form = TopicForm()
 
     if request.method == "POST":
@@ -211,11 +212,13 @@ def updateRoom(request, pk):
     context = {"form": form}
     return render(request, "base/topic.html", context)
 
+
 def topic_room(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    q = request.GET.get("q") if request.GET.get("q") != None else ""
     topics = Topic.objects.filter(name__icontains=q)
     context = {"topics": topics}
     return render(request, "base/topic.html", context)
+
 
 @login_required(login_url="login")
 def deleteRoom(request, pk):
@@ -248,12 +251,13 @@ def updateUser(request):
     user = request.user
     form = UserForm(instance=user)
     if request.method == "POST":
-        form = UserForm(request.POST, request.FILES ,instance=user)
+        form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             return redirect("user-profile", pk=user.id)
     return render(request, "base/update-user.html", {"form": form})
 
+
 def activityPage(request):
     room_message = Message.objects.all()
-    return render(request, "base/activity.html",{'room_message':room_message})
+    return render(request, "base/activity.html", {"room_message": room_message})
