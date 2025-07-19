@@ -6,7 +6,7 @@ StudyBud is a Django-based web application designed for collaborative learning a
 
 - **User Authentication:** Register, login, logout, and manage your profile.
 - **Rooms & Topics:** Create, update, and delete discussion rooms organized by topics.
-- **Messaging:** Real-time threaded conversations within rooms.
+- **Messaging:** Implemented threaded conversations within topic-based room.
 - **Participants:** View and interact with other users in each room.
 - **Profile Customization:** Upload avatars and edit your profile.
 - **Responsive Design:** Modern UI with pastel/dark theme and glassmorphism effects.
