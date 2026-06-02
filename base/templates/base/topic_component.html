@@ -5,7 +5,7 @@
   <ul class="topics__list scroll">
     <li>
       <a href="{% url 'home' %}" class="active"
-        >All <span>{{topics.count}}</span></a
+        >All <span>{{ total_rooms }}</span></a
       >
     </li>
     {% for topic in topics %}

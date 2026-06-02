@@ -7,9 +7,11 @@ Usage:
 """
 
 import random
+from datetime import timedelta
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from django.utils import timezone
 
 from base.models import User, Topic, Room, Message
 
@@ -92,6 +94,7 @@ class Command(BaseCommand):
 
         topics = [Topic.objects.get_or_create(name=t)[0] for t in TOPICS]
 
+        now = timezone.now()
         rooms_created = 0
         messages_created = 0
         for _ in range(options["rooms"]):
@@ -106,15 +109,26 @@ class Command(BaseCommand):
             )
             rooms_created += 1
 
+            # Spread creation times across the last ~30 days (auto_now fields
+            # must be overridden with an update() to take effect).
+            created_at = now - timedelta(
+                days=rng.randint(0, 30), hours=rng.randint(0, 23), minutes=rng.randint(0, 59)
+            )
+            Room.objects.filter(pk=room.pk).update(created=created_at, updated=created_at)
+
             participants = rng.sample(users, rng.randint(2, 6))
             room.participants.add(*participants)
 
+            last = created_at
             for _ in range(rng.randint(1, 5)):
-                Message.objects.create(
+                msg = Message.objects.create(
                     user=rng.choice(participants),
                     room=room,
                     body=rng.choice(MESSAGES),
                 )
+                # Each reply lands a bit after the previous one, up to now.
+                last = min(last + timedelta(hours=rng.randint(1, 48)), now)
+                Message.objects.filter(pk=msg.pk).update(created=last, updated=last)
                 messages_created += 1
 
         self.stdout.write(self.style.SUCCESS(

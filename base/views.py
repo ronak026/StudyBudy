@@ -92,10 +92,11 @@ def home(request):
 
     topics = Topic.objects.all()[0:5]
     room_count = rooms.count()
+    total_rooms = Room.objects.count()
     room_message = Message.objects.filter(Q(room__topic__name__icontains=q))
 
     # Pagination logic for rooms
-    paginator = Paginator(rooms, 3)  # Show 3 rooms per page
+    paginator = Paginator(rooms, 9)  # Show 9 rooms per page
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -103,6 +104,7 @@ def home(request):
         "rooms": page_obj.object_list,
         "topics": topics,
         "room_count": room_count,
+        "total_rooms": total_rooms,
         "room_message": room_message,
         "page_obj": page_obj,
     }
@@ -143,6 +145,7 @@ def userprofile(request, pk):
         "rooms": rooms,
         "room_message": room_message,
         "topics": topics,
+        "total_rooms": Room.objects.count(),
     }
     return render(request, "base/profile.html", context)
 
