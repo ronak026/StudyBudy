@@ -10,22 +10,37 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
+import sys
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from a .env file if present (see .env.example).
+load_dotenv(BASE_DIR / '.env')
+
+
+def env_list(name, default=''):
+    """Read a comma-separated env var into a stripped list."""
+    return [item.strip() for item in os.environ.get(name, default).split(',') if item.strip()]
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-07=6&bs14$9d$e_-7#o!(5rq%gmgck@lx^1e*2-yjk%oi^0ar9'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-07=6&bs14$9d$e_-7#o!(5rq%gmgck@lx^1e*2-yjk%oi^0ar9',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('1', 'true', 'yes', 'on')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', '127.0.0.1,localhost')
 
 
 # Application definition
@@ -46,15 +61,19 @@ AUTH_USER_MODEL = 'base.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    "corsheaders.middleware.CorsMiddleware",
 ]
+
+# CorsMiddleware must come before CommonMiddleware so it can short-circuit
+# preflight requests and add CORS headers to all responses.
+MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.common.CommonMiddleware'),
+                  'corsheaders.middleware.CorsMiddleware')
 
 ROOT_URLCONF = 'studybud.urls'
 
@@ -125,20 +144,34 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
+# Where `collectstatic` gathers files for production serving via WhiteNoise.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+    },
+}
+
+# Use WhiteNoise's compressed+hashed manifest storage only on the real
+# production server. It requires `collectstatic` to have run, so it must not
+# be active during tests (which force DEBUG=False) or local development.
+TESTING = 'test' in sys.argv
+if not DEBUG and not TESTING:
+    STORAGES['staticfiles']['BACKEND'] = (
+        'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    )
+
 MEDIA_URL = '/images/'
 MEDIA_ROOT = BASE_DIR / 'static/images'
 
-
-# STATIC_ROOT =
-
-# STATICFILES_DIRS = [
-#     BASE_DIR / 'base' / 'static',
-# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -146,4 +179,18 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS / CSRF — restrict to known origins instead of allowing everything.
+# In DEBUG, fall back to allowing all origins for convenience.
+CORS_ALLOWED_ORIGINS = env_list('CORS_ALLOWED_ORIGINS')
+CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS')
+CORS_ALLOW_ALL_ORIGINS = DEBUG and not CORS_ALLOWED_ORIGINS
+
+# Production-only hardening (enabled automatically when DEBUG is off).
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
