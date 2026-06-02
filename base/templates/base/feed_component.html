@@ -29,7 +29,11 @@
   {% empty %}
   <div class="empty-state">
     <span class="material-symbols-rounded" aria-hidden="true">forum</span>
-    No study rooms yet. <a href="{% url 'create-room' %}">Create the first one!</a>
+    {% if p_user %}
+      @{{ p_user.username }} hasn't hosted any rooms yet.
+    {% else %}
+      No study rooms yet. <a href="{% url 'create-room' %}">Create the first one!</a>
+    {% endif %}
   </div>
   {% endfor %}
 </div>

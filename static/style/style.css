@@ -598,6 +598,9 @@ select:focus-visible {
 }
 
 .chat-input { padding: 1.4rem 2rem; border-top: 1px solid var(--border); background: var(--surface); }
+.chat-input__form { display: flex; gap: 1rem; align-items: stretch; }
+.chat-input__form .input { flex: 1; }
+.chat-input__form .btn--main { padding-inline: 1.6rem; }
 .chat-input__container .input,
 .input {
   width: 100%;
@@ -744,6 +747,22 @@ select:focus-visible {
 }
 .custom-modal-close:hover { background: var(--surface-hover); color: var(--text); }
 
+/* ---------- Error pages ---------- */
+.error-page {
+  max-width: 48rem;
+  margin: 4rem auto;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+.error-page .material-symbols-rounded {
+  font-size: 6rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+.error-page h1 { font-size: 5rem; color: var(--accent); margin-top: 1rem; }
+.error-page h2 { font-size: 2rem; margin: 0.4rem 0 1rem; }
+.error-page p { color: var(--text-muted); font-size: 1.5rem; margin-bottom: 2.4rem; }
+
 /* ---------- Utilities ---------- */
 .scroll { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 .scroll::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -769,6 +788,7 @@ select:focus-visible {
   .header__user p { display: none; }
   .room-main-box { height: calc(100vh - var(--header-h) - 4rem); }
   .thread { max-width: 92%; }
+  .chat-input__sendLabel { display: none; }
 }
 @media (max-width: 480px) {
   .main-content { padding: 1.6rem 0; }

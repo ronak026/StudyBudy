@@ -111,14 +111,19 @@
 
           <section class="room__message chat-input">
             <div class="chat-input__container">
-              <form action="" method="POST" autocomplete="off">
+              <form action="" method="POST" autocomplete="off" class="chat-input__form">
                 {% csrf_token %}
                 <input
                   name="body"
                   placeholder="Write your message here..."
                   class="input"
                   autocomplete="off"
+                  required
                 />
+                <button type="submit" class="btn btn--main" aria-label="Send message">
+                  <span class="material-symbols-rounded" aria-hidden="true">send</span>
+                  <span class="chat-input__sendLabel">Send</span>
+                </button>
               </form>
             </div>
           </section>

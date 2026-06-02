@@ -24,7 +24,7 @@
             <img src="{{request.user.avatar.url}}" alt="{{ request.user.username }} avatar" />
           </div>
           <p>
-            {{request.user.username}} <span>@{{request.user.username}}</span>
+            {{ request.user.name|default:request.user.username }} <span>@{{request.user.username}}</span>
           </p>
         </a>
         <button class="dropdown-button" type="button" aria-label="Open account menu" aria-haspopup="true">
