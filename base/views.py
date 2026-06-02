@@ -12,7 +12,7 @@
 
 from django.http import HttpResponse
 from .models import Room, Topic, Message, User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib import messages
@@ -32,20 +32,16 @@ def login_page(request):
         return redirect("home")
 
     if request.method == "POST":
-        email = request.POST.get("email").lower()
+        email = request.POST.get("email", "").lower()
         password = request.POST.get("password")
 
-        try:
-            user = User.objects.get(email=email)
-        except:
+        if not User.objects.filter(email=email).exists():
             messages.error(request, "Invalid Email or password")
-
-        user = authenticate(request, email=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect("home")
         else:
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("home")
             messages.error(request, "Invalid Email or password")
 
     context = {"page": page}
@@ -84,11 +80,14 @@ def register_page(request):
 def home(request):
     q = request.GET.get("q", "").strip()
 
+    rooms = Room.objects.select_related("host", "topic")
     if q == "" or q.lower() == "all":
-        rooms = Room.objects.all().order_by("-created")
+        rooms = rooms.order_by("-created")
     else:
-        rooms = Room.objects.filter(
-            Q(topic__name__iexact=q) | Q(name__iexact=q) | Q(description__iexact=q)
+        rooms = rooms.filter(
+            Q(topic__name__icontains=q)
+            | Q(name__icontains=q)
+            | Q(description__icontains=q)
         )
 
     topics = Topic.objects.all()[0:5]
@@ -112,8 +111,7 @@ def home(request):
 
 # @login_required(login_url='login')
 def room(request, pk):
-    # return HttpResponse('room')
-    room = Room.objects.get(id=pk)
+    room = get_object_or_404(Room, id=pk)
     room_messages = room.message_set.all()
     participants = room.participants.all()
     if request.method == "POST":
@@ -135,8 +133,8 @@ def room(request, pk):
 
 
 def userprofile(request, pk):
-    p_user = User.objects.get(id=pk)
-    rooms = p_user.room_set.all()
+    p_user = get_object_or_404(User, id=pk)
+    rooms = p_user.room_set.select_related("host", "topic")
     room_message = p_user.message_set.all()
     topics = Topic.objects.all()
     # rooms = Room.objects.filter(participants=p_user)
@@ -181,7 +179,7 @@ def create_room(request):
 
 @login_required(login_url="login")
 def updateRoom(request, pk):
-    room = Room.objects.get(id=pk)
+    room = get_object_or_404(Room, id=pk)
     form = RoomForm(instance=room)
     topics = Topic.objects.all()
     # form = RoomForm(initial=room)
@@ -200,18 +198,6 @@ def updateRoom(request, pk):
     context = {"form": form, "topics": topics, "room": room}
     return render(request, "base/room_form.html", context)
 
-    # def topic_old(request):
-    form = TopicForm()
-
-    if request.method == "POST":
-        form = TopicForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("home")
-
-    context = {"form": form}
-    return render(request, "base/topic.html", context)
-
 
 def topic_room(request):
     q = request.GET.get("q") if request.GET.get("q") != None else ""
@@ -222,7 +208,7 @@ def topic_room(request):
 
 @login_required(login_url="login")
 def deleteRoom(request, pk):
-    room = Room.objects.get(id=pk)
+    room = get_object_or_404(Room, id=pk)
 
     if request.user != room.host:
         return HttpResponse("<h2/>You are not allowed here")
@@ -235,7 +221,7 @@ def deleteRoom(request, pk):
 
 @login_required(login_url="login")
 def deleteMessage(request, pk):
-    message = Message.objects.get(id=pk)
+    message = get_object_or_404(Message, id=pk)
 
     if request.user != message.user:
         return HttpResponse("<h2/>You are not allowed here")
@@ -259,5 +245,5 @@ def updateUser(request):
 
 
 def activityPage(request):
-    room_message = Message.objects.all()
+    room_message = Message.objects.select_related("user", "room")
     return render(request, "base/activity.html", {"room_message": room_message})

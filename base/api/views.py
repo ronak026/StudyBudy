@@ -1,6 +1,7 @@
 # from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from base.models import Room
 from .serializers import  RoomSerialozer
 
@@ -22,6 +23,6 @@ def getRooms(request):
 
 @api_view(['GET'])
 def getRoom(request,pk):
-    room = Room.objects.get(id=pk)
+    room = get_object_or_404(Room, id=pk)
     serializer = RoomSerialozer(room, many=False)
     return Response(serializer.data)

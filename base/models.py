@@ -10,7 +10,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, null=True)
     bio=models.TextField(null=True)
     
-    avatar=models.ImageField(null=True, default="luffy.jpg")
+    avatar=models.ImageField(null=True, default="luffy.jpg", upload_to="avatars/")
     
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=[]
@@ -52,20 +52,3 @@ class Message(models.Model):
         
     def __str__(self):
         return self.body[0:50]
-    
-    
-# class Login(models.Model):
-#     name= models.CharField(max_length=200)  
-#     email= models.EmailField(max_length=30)
-#     password= models.CharField(max_length=8)
-    
-#     def __str__(self):
-#         return self.name
-    
-# class Register(models.Model):
-#     username= models.CharField(max_length=100)
-#     email=models.EmailField(max_length=100)
-#     password= models.CharField(max_length=8)
-    
-#     def __str__(self):
-#         return self.username
