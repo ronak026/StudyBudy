@@ -14,12 +14,12 @@
         <form class="form" action="" method="POST">
           {% csrf_token %}
           <div class="form__group">
-            <label for="room_name">Email</label>
-            <input id="username" name="email" type="text" placeholder="Email" />
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="Email" autocomplete="email" />
           </div>
           <div class="form__group">
             <label for="password">Password</label>
-            <input id="password" name="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
+            <input id="password" name="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" />
           </div>
           <button class="btn btn--main" type="submit">
             <span class="material-symbols-rounded" aria-hidden="true">lock</span>
@@ -47,8 +47,9 @@
           {% csrf_token %}
           {% for field in form %}
           <div class="form__group">
-            <label for="room_name">{{field.label}}</label>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field }}
+            {% if field.errors %}<small class="form__error">{{ field.errors|striptags }}</small>{% endif %}
           </div>
           {% endfor %}
           <button class="btn btn--main" type="submit">

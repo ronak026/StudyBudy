@@ -44,16 +44,9 @@
                   Created {{ room.created|timesince }} ago
                 </h4>
               </div>
-              <div
-                class="room__hosted"
-                style="
-                  flex-direction: column;
-                  align-items: flex-start;
-                  gap: 0.3rem;
-                "
-              >
+              <div class="room__hosted room__hosted--stacked">
                 <span>Hosted by</span>
-                <div style="display: flex; align-items: center; gap: 0.7rem">
+                <div class="room__hostRow">
                   <a
                     href="{% url 'user-profile' room.host.id %}"
                     class="room__author"

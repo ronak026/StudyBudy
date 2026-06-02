@@ -3,7 +3,7 @@
 {% block start %}
 <main class="update-account layout">
   <div class="container">
-    <div class="layout__box" style="margin-top: 50;">
+    <div class="layout__box">
       <div class="layout__boxHeader">
         <div class="layout__boxTitle">
           <a href="{% url 'home' %}" aria-label="Back to home">
@@ -18,8 +18,9 @@
 
           {% for field in form %}
           <div class="form__group">
-            <label for="profile__pic">{{field.label}}</label>
-            {{field}}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<small class="form__error">{{ field.errors|striptags }}</small>{% endif %}
           </div>
           {% endfor %}
 

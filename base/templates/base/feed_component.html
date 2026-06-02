@@ -26,6 +26,11 @@
       <p class="roomListRoom__topic">{{ room.topic.name }}</p>
     </div>
   </div>
+  {% empty %}
+  <div class="empty-state">
+    <span class="material-symbols-rounded" aria-hidden="true">forum</span>
+    No study rooms yet. <a href="{% url 'create-room' %}">Create the first one!</a>
+  </div>
   {% endfor %}
 </div>
 

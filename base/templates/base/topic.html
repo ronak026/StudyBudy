@@ -30,6 +30,8 @@
                 <li>
                   <a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }} <span>{{ topic.room_set.all.count }}</span></a>
                 </li>
+              {% empty %}
+                <li class="empty-state">No topics found.</li>
               {% endfor %}
             </ul>
           </div>

@@ -44,6 +44,11 @@
             <div class="activities__boxRoomContent">{{message.body}}</div>
           </div>
         </div>
+        {% empty %}
+        <div class="empty-state">
+          <span class="material-symbols-rounded" aria-hidden="true">history</span>
+          No recent activity yet.
+        </div>
         {% endfor %}
       </div>
     </div>

@@ -18,24 +18,22 @@
             {% csrf_token %}
 
             <div class="form__group">
-              <label for="room_name">Enter Topic</label>
-              <input required type="text" value="{{room.topic.name}}" name="topic" list="topic-list" />
+              <label for="room_topic">Enter Topic</label>
+              <input id="room_topic" required type="text" value="{{room.topic.name}}" name="topic" list="topic-list" />
               <datalist id="topic-list">
-                <select id="room_topic">
-                  {% for topic in topic %}
-                    <option value="{{topic.name}}">{{topic.name}}</option>
-                  {% endfor %}
-                </select>
+                {% for topic in topic %}
+                  <option value="{{topic.name}}">{{topic.name}}</option>
+                {% endfor %}
               </datalist>
             </div>
 
             <div class="form__group">
-              <label for="room_name">Room Name</label>
+              <label for="{{ form.name.id_for_label }}">Room Name</label>
               {{ form.name }}
             </div>
-          
+
             <div class="form__group">
-              <label for="description">Room description</label>
+              <label for="{{ form.description.id_for_label }}">Room description</label>
               {{ form.description }}
             </div>
 
