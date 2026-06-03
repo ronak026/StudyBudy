@@ -1,0 +1,17 @@
+{% comment %}
+  Reusable avatar with an initials fallback.
+  Usage: {% include 'base/_avatar.html' with user=room.host size='h-8 w-8' text='text-xs' %}
+  The initials sit behind the image; if the avatar is missing or fails to load,
+  the image hides (onerror) and the colored initials show through.
+{% endcomment %}
+<span class="relative inline-grid shrink-0 place-items-center overflow-hidden rounded-full bg-indigo-100 font-semibold uppercase text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 {{ size|default:'h-9 w-9' }} {{ ring }}">
+  <span class="{{ text|default:'text-sm' }}">{{ user.name|default:user.username|first }}</span>
+  {% if user.avatar %}
+  <img
+    src="{{ user.avatar.url }}"
+    alt="{{ user.username }} avatar"
+    class="absolute inset-0 h-full w-full object-cover"
+    onerror="this.style.display='none'"
+  />
+  {% endif %}
+</span>

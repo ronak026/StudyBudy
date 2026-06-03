@@ -18,11 +18,15 @@
     />
     {% tailwind_css %}
     <title>StudyBuddy - Find study partners around the world!</title>
-    <!-- Apply saved theme before first paint to avoid a flash of the wrong theme. -->
+    <!-- Apply theme before first paint: saved choice wins, else follow the OS. -->
     <script>
-      if (localStorage.getItem("theme") === "dark") {
-        document.documentElement.classList.add("dark-mode");
-      }
+      (function () {
+        var saved = localStorage.getItem("theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (saved === "dark" || (saved === null && prefersDark)) {
+          document.documentElement.classList.add("dark-mode");
+        }
+      })();
     </script>
     <style>
       :root { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
@@ -33,24 +37,21 @@
     {% include 'negbr.html' %}
 
     {% if messages %}
-    <div
-      id="popup-message"
-      class="fixed left-1/2 top-5 z-[100] -translate-x-1/2 animate-slide-down"
-      role="status"
-      aria-live="polite"
-    >
-      <div class="flex items-center gap-4 rounded-xl border border-gray-200 bg-white px-5 py-3.5 text-sm shadow-xl dark:border-zinc-700 dark:bg-zinc-900">
-        <div>
-          {% for message in messages %}<p>{{ message }}</p>{% endfor %}
-        </div>
-        <button
-          type="button"
-          data-close-modal
-          class="rounded-md border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-600 transition hover:bg-gray-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-        >
-          Close
+    <div id="popup-message" class="fixed left-1/2 top-5 z-[100] flex w-[min(92vw,26rem)] -translate-x-1/2 flex-col gap-2" role="status" aria-live="polite">
+      {% for message in messages %}
+      <div class="flex items-center gap-3 rounded-xl border px-4 py-3 text-sm shadow-lg animate-slide-down
+        {% if message.tags == 'success' %}border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300
+        {% elif message.tags == 'error' %}border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300
+        {% else %}border-gray-200 bg-white text-gray-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200{% endif %}">
+        <span class="material-symbols-rounded text-[20px]" aria-hidden="true">
+          {% if message.tags == 'success' %}check_circle{% elif message.tags == 'error' %}error{% else %}info{% endif %}
+        </span>
+        <span class="flex-1">{{ message }}</span>
+        <button type="button" data-close-modal class="icon-btn -mr-1 p-1" aria-label="Dismiss">
+          <span class="material-symbols-rounded text-[18px]" aria-hidden="true">close</span>
         </button>
       </div>
+      {% endfor %}
     </div>
     {% endif %}
 

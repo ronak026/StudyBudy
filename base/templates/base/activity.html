@@ -13,9 +13,7 @@
       <div class="border-b border-gray-100 pb-4 last:border-0 last:pb-0 dark:border-zinc-800">
         <div class="mb-1.5 flex items-center justify-between">
           <a href="{% url 'user-profile' message.user.id %}" class="flex items-center gap-2">
-            <span class="h-8 w-8 overflow-hidden rounded-full bg-gray-200 dark:bg-zinc-700">
-              <img src="{{ message.user.avatar.url }}" alt="{{ message.user }} avatar" class="h-full w-full object-cover" />
-            </span>
+            {% include 'base/_avatar.html' with user=message.user size='h-8 w-8' text='text-xs' %}
             <span class="leading-tight">
               <span class="block text-sm font-semibold text-gray-900 dark:text-zinc-100">@{{ message.user }}</span>
               <span class="block text-xs text-gray-400 dark:text-zinc-500">{{ message.created|timesince }} ago</span>

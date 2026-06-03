@@ -3,9 +3,7 @@
   <article class="card group animate-fade-up p-5 transition hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:hover:border-zinc-700">
     <div class="mb-3 flex items-center justify-between">
       <a href="{% url 'user-profile' room.host.id %}" class="flex items-center gap-2 text-sm font-medium text-gray-600 transition hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400">
-        <span class="h-8 w-8 overflow-hidden rounded-full bg-gray-200 dark:bg-zinc-700">
-          <img src="{{ room.host.avatar.url }}" alt="@{{ room.host.username }} avatar" class="h-full w-full object-cover" />
-        </span>
+        {% include 'base/_avatar.html' with user=room.host size='h-8 w-8' text='text-xs' %}
         @{{ room.host.username }}
       </a>
       <span class="text-xs text-gray-400 dark:text-zinc-500">{{ room.created|timesince }} ago</span>

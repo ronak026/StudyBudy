@@ -31,9 +31,7 @@
         <div class="flex flex-wrap items-center gap-2 text-sm">
           <span class="text-gray-500 dark:text-zinc-400">Hosted by</span>
           <a href="{% url 'user-profile' room.host.id %}" class="flex items-center gap-2 font-semibold text-gray-800 hover:text-indigo-600 dark:text-zinc-200 dark:hover:text-indigo-400">
-            <span class="h-7 w-7 overflow-hidden rounded-full bg-gray-200 dark:bg-zinc-700">
-              <img src="{{ room.host.avatar.url }}" alt="Host avatar" class="h-full w-full object-cover" />
-            </span>
+            {% include 'base/_avatar.html' with user=room.host size='h-7 w-7' text='text-xs' %}
             @{{ room.host.username }}
           </a>
           <span class="badge ml-auto">{{ room.topic }}</span>
@@ -50,9 +48,7 @@
           <article class="flex max-w-[80%] flex-col {% if request.user == message.user %}ml-auto items-end{% endif %} animate-fade-up">
             <div class="mb-1 flex items-center gap-2 {% if request.user == message.user %}flex-row-reverse{% endif %}">
               <a href="{% url 'user-profile' message.user.id %}" class="flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400">
-                <span class="h-6 w-6 overflow-hidden rounded-full bg-gray-200 dark:bg-zinc-700">
-                  <img src="{{ message.user.avatar.url }}" alt="User avatar" class="h-full w-full object-cover" />
-                </span>
+                {% include 'base/_avatar.html' with user=message.user size='h-6 w-6' text='text-[10px]' %}
                 @{{ message.user.username }}
               </a>
               <span class="text-[11px] text-gray-400 dark:text-zinc-500">{{ message.created|timesince }} ago</span>
@@ -91,9 +87,7 @@
       <div class="mt-4 flex flex-col gap-1">
         {% for user in participants %}
         <a href="{% url 'user-profile' user.id %}" class="flex items-center gap-3 rounded-lg p-2 transition hover:bg-gray-100 dark:hover:bg-zinc-800">
-          <span class="h-9 w-9 overflow-hidden rounded-full bg-gray-200 dark:bg-zinc-700">
-            <img src="{{ user.avatar.url }}" alt="Participant avatar" class="h-full w-full object-cover" />
-          </span>
+          {% include 'base/_avatar.html' with user=user size='h-9 w-9' %}
           <span class="leading-tight">
             <span class="block text-sm font-semibold text-gray-900 dark:text-zinc-100">{{ user.name|default:user.username }}</span>
             <span class="block text-xs text-gray-400 dark:text-zinc-500">@{{ user.username }}</span>

@@ -8,10 +8,14 @@
     </aside>
 
     <section class="min-w-0">
+      <a href="{% url 'home' %}" class="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400">
+        <span class="material-symbols-rounded text-[20px]" aria-hidden="true">arrow_back</span>
+        Back to home
+      </a>
       <!-- Profile card -->
       <div class="card animate-fade-up mb-6 p-6 text-center">
-        <span class="mx-auto mb-4 grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-gray-200 ring-4 ring-indigo-500/50 dark:bg-zinc-700">
-          <img src="{{ p_user.avatar.url }}" alt="{{ p_user.username }} avatar" class="h-full w-full object-cover" />
+        <span class="mx-auto mb-4 block w-fit">
+          {% include 'base/_avatar.html' with user=p_user size='h-24 w-24' text='text-3xl' ring='ring-4 ring-indigo-500/50' %}
         </span>
         <h1 class="text-xl font-bold">{{ p_user.name|default:p_user.username }}</h1>
         <p class="text-sm text-gray-500 dark:text-zinc-400">@{{ p_user.username }}</p>

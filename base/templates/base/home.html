@@ -1,5 +1,26 @@
 {% extends 'main.html' %}
 {% block start %}
+{% if not request.user.is_authenticated %}
+<section class="relative overflow-hidden border-b border-gray-200 bg-gradient-to-b from-indigo-50/80 to-transparent dark:border-zinc-800 dark:from-indigo-500/5">
+  <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:py-24">
+    <span class="inline-flex animate-fade-in items-center gap-1.5 rounded-full border border-indigo-200 bg-white/70 px-3 py-1 text-xs font-medium text-indigo-700 dark:border-indigo-500/30 dark:bg-zinc-900/70 dark:text-indigo-300">
+      <span class="material-symbols-rounded text-[16px]" aria-hidden="true">school</span>
+      Learn together, achieve more
+    </span>
+    <h1 class="mt-5 animate-fade-up text-4xl font-extrabold tracking-tight sm:text-6xl">
+      Find your
+      <span class="bg-gradient-to-r from-indigo-600 to-violet-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-violet-400">study partner</span>
+    </h1>
+    <p class="mx-auto mt-4 max-w-xl animate-fade-up text-base text-gray-600 dark:text-zinc-400 sm:text-lg">
+      Join topic-based rooms, share ideas, and learn alongside a community of curious minds — anywhere in the world.
+    </p>
+    <div class="mt-8 flex animate-fade-up flex-wrap items-center justify-center gap-3">
+      <a href="{% url 'register' %}" class="btn btn-primary px-6 py-3 text-base">Get started — it's free</a>
+      <a href="{% url 'login' %}" class="btn px-6 py-3 text-base">Log in</a>
+    </div>
+  </div>
+</section>
+{% endif %}
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)_19rem]">
 
@@ -27,7 +48,16 @@
       <div class="mb-5 flex items-center justify-between gap-4">
         <div>
           <h1 class="text-2xl font-bold tracking-tight">Study Rooms</h1>
+          {% if request.GET.q and request.GET.q != 'all' %}
+          <p class="flex flex-wrap items-center gap-1.5 text-sm text-gray-500 dark:text-zinc-400">
+            {{ room_count }} result{{ room_count|pluralize }} for &ldquo;<span class="font-medium text-gray-700 dark:text-zinc-200">{{ request.GET.q }}</span>&rdquo;
+            <a href="{% url 'home' %}" class="inline-flex items-center gap-0.5 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 transition hover:bg-gray-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700">
+              clear <span class="material-symbols-rounded text-[14px]" aria-hidden="true">close</span>
+            </a>
+          </p>
+          {% else %}
           <p class="text-sm text-gray-500 dark:text-zinc-400">{{ room_count }} room{{ room_count|pluralize }} available</p>
+          {% endif %}
         </div>
         <a class="btn btn-primary" href="{% url 'create-room' %}">
           <span class="material-symbols-rounded text-[20px]" aria-hidden="true">add</span>
