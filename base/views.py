@@ -90,13 +90,13 @@ def home(request):
             | Q(description__icontains=q)
         )
 
-    topics = Topic.objects.all()[0:5]
+    topics = Topic.objects.all()
     room_count = rooms.count()
     total_rooms = Room.objects.count()
     room_message = Message.objects.filter(Q(room__topic__name__icontains=q))
 
     # Pagination logic for rooms
-    paginator = Paginator(rooms, 9)  # Show 9 rooms per page
+    paginator = Paginator(rooms, 5)  # Show 5 rooms per page
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 

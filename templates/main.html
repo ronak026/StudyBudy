@@ -33,7 +33,7 @@
     </style>
   </head>
 
-  <body class="min-h-screen bg-gray-50 text-gray-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
+  <body class="flex min-h-screen flex-col bg-gray-50 text-gray-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
     {% include 'negbr.html' %}
 
     {% if messages %}
@@ -55,7 +55,9 @@
     </div>
     {% endif %}
 
-    {% block start %}{% endblock %}
+    <div class="flex-1">{% block start %}{% endblock %}</div>
+
+    {% include '_footer.html' %}
 
     <script src="{% static 'js/script.js' %}"></script>
   </body>

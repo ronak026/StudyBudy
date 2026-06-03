@@ -32,6 +32,18 @@ if (photoInput)
 const conversationThread = document.querySelector("[data-chat-scroll]");
 if (conversationThread) conversationThread.scrollTop = conversationThread.scrollHeight;
 
+// Browse Topics: expand/collapse the extra topics inline (no page navigation).
+const topicsMore = document.querySelector("[data-topics-more]");
+if (topicsMore) {
+  topicsMore.addEventListener("click", () => {
+    const expanded = topicsMore.getAttribute("aria-expanded") === "true";
+    document.querySelectorAll(".topic-extra").forEach((el) => el.classList.toggle("hidden", expanded));
+    topicsMore.setAttribute("aria-expanded", String(!expanded));
+    topicsMore.querySelector("[data-more-label]").textContent = expanded ? "More" : "Less";
+    topicsMore.querySelector(".material-symbols-rounded").textContent = expanded ? "expand_more" : "expand_less";
+  });
+}
+
 // Flash message popup: close on click, and auto-dismiss after 4s.
 const popupMessage = document.getElementById("popup-message");
 if (popupMessage) {

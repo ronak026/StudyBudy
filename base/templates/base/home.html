@@ -2,19 +2,19 @@
 {% block start %}
 {% if not request.user.is_authenticated %}
 <section class="relative overflow-hidden border-b border-gray-200 bg-gradient-to-b from-indigo-50/80 to-transparent dark:border-zinc-800 dark:from-indigo-500/5">
-  <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:py-24">
+  <div class="mx-auto max-w-4xl px-4 py-10 text-center sm:py-14">
     <span class="inline-flex animate-fade-in items-center gap-1.5 rounded-full border border-indigo-200 bg-white/70 px-3 py-1 text-xs font-medium text-indigo-700 dark:border-indigo-500/30 dark:bg-zinc-900/70 dark:text-indigo-300">
       <span class="material-symbols-rounded text-[16px]" aria-hidden="true">school</span>
       Learn together, achieve more
     </span>
-    <h1 class="mt-5 animate-fade-up text-4xl font-extrabold tracking-tight sm:text-6xl">
+    <h1 class="mt-4 animate-fade-up text-4xl font-extrabold tracking-tight sm:text-5xl">
       Find your
       <span class="bg-gradient-to-r from-indigo-600 to-violet-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-violet-400">study partner</span>
     </h1>
-    <p class="mx-auto mt-4 max-w-xl animate-fade-up text-base text-gray-600 dark:text-zinc-400 sm:text-lg">
+    <p class="mx-auto mt-3 max-w-xl animate-fade-up text-base text-gray-600 dark:text-zinc-400">
       Join topic-based rooms, share ideas, and learn alongside a community of curious minds — anywhere in the world.
     </p>
-    <div class="mt-8 flex animate-fade-up flex-wrap items-center justify-center gap-3">
+    <div class="mt-6 flex animate-fade-up flex-wrap items-center justify-center gap-3">
       <a href="{% url 'register' %}" class="btn btn-primary px-6 py-3 text-base">Get started — it's free</a>
       <a href="{% url 'login' %}" class="btn px-6 py-3 text-base">Log in</a>
     </div>
