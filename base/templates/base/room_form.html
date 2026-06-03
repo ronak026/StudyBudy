@@ -1,50 +1,37 @@
 {% extends 'main.html' %}
-
 {% block start %}
-
-  <main class="create-room layout">
-    <div class="container">
-      <div class="layout__box">
-        <div class="layout__boxHeader">
-          <div class="layout__boxTitle">
-            <a href="{% url 'home' %}" aria-label="Back to home">
-              <span class="material-symbols-rounded" aria-hidden="true">arrow_back</span>
-            </a>
-            <h3>Create/Update Study Room</h3>
-          </div>
-        </div>
-        <div class="layout__body">
-          <form class="form" action="" method="POST">
-            {% csrf_token %}
-
-            <div class="form__group">
-              <label for="room_topic">Enter Topic</label>
-              <input id="room_topic" required type="text" value="{{room.topic.name}}" name="topic" list="topic-list" />
-              <datalist id="topic-list">
-                {% for topic in topic %}
-                  <option value="{{topic.name}}">{{topic.name}}</option>
-                {% endfor %}
-              </datalist>
-            </div>
-
-            <div class="form__group">
-              <label for="{{ form.name.id_for_label }}">Room Name</label>
-              {{ form.name }}
-            </div>
-
-            <div class="form__group">
-              <label for="{{ form.description.id_for_label }}">Room description</label>
-              {{ form.description }}
-            </div>
-
-            <div class="form__action">
-              <a class="btn btn--dark" href="{% url 'home' %}">Cancel</a>
-              <button class="btn btn--main" type="submit">Submit</button>
-            </div>
-          </form>
-        </div>
-      </div>
+<div class="mx-auto max-w-2xl px-4 py-10">
+  <div class="card animate-fade-up overflow-hidden">
+    <div class="flex items-center gap-2 border-b border-gray-200 px-6 py-5 dark:border-zinc-800">
+      <a href="{% url 'home' %}" class="icon-btn" aria-label="Back to home">
+        <span class="material-symbols-rounded text-[22px]" aria-hidden="true">arrow_back</span>
+      </a>
+      <h1 class="text-lg font-bold">{% if room %}Update Study Room{% else %}Create Study Room{% endif %}</h1>
     </div>
-  </main>
-
+    <div class="p-6">
+      <form class="flex flex-col gap-4" action="" method="POST">
+        {% csrf_token %}
+        <div>
+          <label for="room_topic" class="field-label">Topic</label>
+          <input id="room_topic" required type="text" value="{{ room.topic.name }}" name="topic" list="topic-list" class="input" placeholder="e.g. Python" />
+          <datalist id="topic-list">
+            {% for topic in topics %}<option value="{{ topic.name }}"></option>{% endfor %}
+          </datalist>
+        </div>
+        <div>
+          <label for="{{ form.name.id_for_label }}" class="field-label">Room Name</label>
+          {{ form.name }}
+        </div>
+        <div>
+          <label for="{{ form.description.id_for_label }}" class="field-label">Room Description</label>
+          {{ form.description }}
+        </div>
+        <div class="mt-2 flex justify-end gap-3">
+          <a class="btn" href="{% url 'home' %}">Cancel</a>
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

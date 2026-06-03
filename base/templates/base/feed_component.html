@@ -1,72 +1,54 @@
-<div class="scroll roomListRoom-list">
+<div class="flex flex-col gap-3.5">
   {% for room in rooms %}
-  <div class="roomListRoom">
-    <div class="roomListRoom__header">
-      <a
-        href="{% url 'user-profile' room.host.id %}"
-        class="roomListRoom__author"
-      >
-        <div class="avatar avatar--small">
-          <img src="{{room.host.avatar.url}}" alt="@{{ room.host.username }} avatar" />
-        </div>
-        <span>@{{ room.host.username }}</span>
+  <article class="card group animate-fade-up p-5 transition hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:hover:border-zinc-700">
+    <div class="mb-3 flex items-center justify-between">
+      <a href="{% url 'user-profile' room.host.id %}" class="flex items-center gap-2 text-sm font-medium text-gray-600 transition hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400">
+        <span class="h-8 w-8 overflow-hidden rounded-full bg-gray-200 dark:bg-zinc-700">
+          <img src="{{ room.host.avatar.url }}" alt="@{{ room.host.username }} avatar" class="h-full w-full object-cover" />
+        </span>
+        @{{ room.host.username }}
       </a>
-      <div class="roomListRoom__actions">
-        <span>{{ room.created|timesince }} ago</span>
-      </div>
+      <span class="text-xs text-gray-400 dark:text-zinc-500">{{ room.created|timesince }} ago</span>
     </div>
-    <div class="roomListRoom__content">
-      <a href="{% url 'room' room.id %}">{{ room.name }}</a>
-    </div>
-    <div class="roomListRoom__meta">
-      <a href="{% url 'room' room.id %}" class="roomListRoom__joined">
-        <span class="material-symbols-rounded" aria-hidden="true">group</span>
+
+    <a href="{% url 'room' room.id %}" class="block text-lg font-semibold tracking-tight text-gray-900 transition group-hover:text-indigo-600 dark:text-zinc-100 dark:group-hover:text-indigo-400">
+      {{ room.name }}
+    </a>
+
+    <div class="mt-4 flex items-center justify-between gap-3 border-t border-gray-100 pt-3.5 dark:border-zinc-800">
+      <a href="{% url 'room' room.id %}" class="flex items-center gap-1.5 text-sm font-medium text-gray-500 transition hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400">
+        <span class="material-symbols-rounded text-[19px]" aria-hidden="true">group</span>
         {{ room.participants.all.count }} Joined
       </a>
-      <p class="roomListRoom__topic">{{ room.topic.name }}</p>
+      <span class="badge">{{ room.topic.name }}</span>
     </div>
-  </div>
+  </article>
   {% empty %}
-  <div class="empty-state">
-    <span class="material-symbols-rounded" aria-hidden="true">forum</span>
+  <div class="card flex flex-col items-center gap-2 border-dashed py-16 text-center text-gray-500 dark:text-zinc-400">
+    <span class="material-symbols-rounded text-[40px] opacity-60" aria-hidden="true">forum</span>
     {% if p_user %}
-      @{{ p_user.username }} hasn't hosted any rooms yet.
+      <p>@{{ p_user.username }} hasn't hosted any rooms yet.</p>
     {% else %}
-      No study rooms yet. <a href="{% url 'create-room' %}">Create the first one!</a>
+      <p>No study rooms yet. <a href="{% url 'create-room' %}" class="font-medium text-indigo-600 hover:underline dark:text-indigo-400">Create the first one!</a></p>
     {% endif %}
   </div>
   {% endfor %}
 </div>
 
-<!-- Modern Pagination Controls -->
 {% if page_obj.has_other_pages %}
-<nav class="modern-pagination horizontal-pagination">
-  <ul class="modern-pagination__list">
-    {% if page_obj.has_previous %}
-    <li class="modern-pagination__item">
-      <a
-        class="modern-pagination__link"
-        href="?page={{ page_obj.previous_page_number }}"
-        >&laquo; Prev</a
-      >
-    </li>
-    {% endif %} {% for num in page_obj.paginator.page_range %} {% if page_obj.number == num %}
-    <li class="modern-pagination__item">
-      <span class="modern-pagination__current">{{ num }}</span>
-    </li>
+<nav class="mt-6 flex flex-wrap justify-center gap-1.5" aria-label="Pagination">
+  {% if page_obj.has_previous %}
+  <a class="inline-flex h-10 items-center rounded-md border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 transition hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800" href="?page={{ page_obj.previous_page_number }}">&laquo; Prev</a>
+  {% endif %}
+  {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+    <span class="inline-flex h-10 min-w-10 items-center justify-center rounded-md border border-indigo-600 bg-indigo-600 px-3 text-sm font-medium text-white">{{ num }}</span>
     {% else %}
-    <li class="modern-pagination__item">
-      <a class="modern-pagination__link" href="?page={{ num }}">{{ num }}</a>
-    </li>
-    {% endif %} {% endfor %} {% if page_obj.has_next %}
-    <li class="modern-pagination__item">
-      <a
-        class="modern-pagination__link"
-        href="?page={{ page_obj.next_page_number }}"
-        >Next &raquo;</a
-      >
-    </li>
+    <a class="inline-flex h-10 min-w-10 items-center justify-center rounded-md border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 transition hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800" href="?page={{ num }}">{{ num }}</a>
     {% endif %}
-  </ul>
+  {% endfor %}
+  {% if page_obj.has_next %}
+  <a class="inline-flex h-10 items-center rounded-md border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 transition hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800" href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>
+  {% endif %}
 </nav>
 {% endif %}

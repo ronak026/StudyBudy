@@ -1,38 +1,29 @@
 {% extends 'main.html' %}
-
 {% block start %}
-<main class="update-account layout">
-  <div class="container">
-    <div class="layout__box">
-      <div class="layout__boxHeader">
-        <div class="layout__boxTitle">
-          <a href="{% url 'home' %}" aria-label="Back to home">
-            <span class="material-symbols-rounded" aria-hidden="true">arrow_back</span>
-          </a>
-          <h3>Edit your profile</h3>
+<div class="mx-auto max-w-2xl px-4 py-10">
+  <div class="card animate-fade-up overflow-hidden">
+    <div class="flex items-center gap-2 border-b border-gray-200 px-6 py-5 dark:border-zinc-800">
+      <a href="{% url 'home' %}" class="icon-btn" aria-label="Back to home">
+        <span class="material-symbols-rounded text-[22px]" aria-hidden="true">arrow_back</span>
+      </a>
+      <h1 class="text-lg font-bold">Edit your profile</h1>
+    </div>
+    <div class="p-6">
+      <form class="flex flex-col gap-4" action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}" class="field-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<small class="mt-1 block text-sm text-rose-600">{{ field.errors|striptags }}</small>{% endif %}
         </div>
-      </div>
-      <div class="layout__body">
-        <form class="form" action="" method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-
-          {% for field in form %}
-          <div class="form__group">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}<small class="form__error">{{ field.errors|striptags }}</small>{% endif %}
-          </div>
-          {% endfor %}
-
-
-          <div class="form__action">
-            <a class="btn btn--dark" href="{% url 'home' %}">Cancel</a>
-            <button class="btn btn--main" type="submit">Update</button>
-          </div>
-        </form>
-      </div>
+        {% endfor %}
+        <div class="mt-2 flex justify-end gap-3">
+          <a class="btn" href="{% url 'home' %}">Cancel</a>
+          <button class="btn btn-primary" type="submit">Update</button>
+        </div>
+      </form>
     </div>
   </div>
-  </div>
-</main>
+</div>
 {% endblock %}

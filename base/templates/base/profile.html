@@ -1,47 +1,41 @@
 {% extends 'main.html' %}
 {% block start %}
+<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)_19rem]">
 
-  <main class="profile-page layout layout--3">
-    <div class="container">
-      <!-- Topics Start -->
-        {% include 'base/topic_component.html' %}
-      <!-- Topics End -->
+    <aside class="hidden lg:block">
+      {% include 'base/topic_component.html' %}
+    </aside>
 
-      <!-- Room List Start -->
-      <div class="roomList">
-        <div class="profile">
-          <div class="profile__avatar">
-            <div class="avatar avatar--large active">
-              <img src="{{p_user.avatar.url}}" alt="{{ p_user.username }} avatar" />
-            </div>
-          </div>
-          <div class="profile__info">
-            <h3>{{ p_user.name|default:p_user.username }}</h3>
-            <p>@{{p_user.username}}</p>
-            {% if request.user == p_user %}
-            <a href="{% url 'update-user' %}" class="btn btn--main btn--pill">Edit Profile</a>
-          {% endif %}
-          </div>
-          <div class="profile__about">
-            <h3>Bio</h3>
-            <p>{{p_user.bio}}</p>
-          </div>
+    <section class="min-w-0">
+      <!-- Profile card -->
+      <div class="card animate-fade-up mb-6 p-6 text-center">
+        <span class="mx-auto mb-4 grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-gray-200 ring-4 ring-indigo-500/50 dark:bg-zinc-700">
+          <img src="{{ p_user.avatar.url }}" alt="{{ p_user.username }} avatar" class="h-full w-full object-cover" />
+        </span>
+        <h1 class="text-xl font-bold">{{ p_user.name|default:p_user.username }}</h1>
+        <p class="text-sm text-gray-500 dark:text-zinc-400">@{{ p_user.username }}</p>
+        {% if request.user == p_user %}
+        <a href="{% url 'update-user' %}" class="btn mt-4 inline-flex">
+          <span class="material-symbols-rounded text-[19px]" aria-hidden="true">edit</span>
+          Edit Profile
+        </a>
+        {% endif %}
+        {% if p_user.bio %}
+        <div class="mt-6 border-t border-gray-100 pt-5 text-left dark:border-zinc-800">
+          <h2 class="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-zinc-500">Bio</h2>
+          <p class="text-sm text-gray-600 dark:text-zinc-300">{{ p_user.bio }}</p>
         </div>
-
-        <div class="roomList__header">
-          <div>
-            <h2>Study Rooms Hosted by {{p_user.name}}</h2>
-          </div>
-        </div>
-        {% include 'base/feed_component.html' %}
-
+        {% endif %}
       </div>
-      <!-- Room List End -->
 
-      <!-- Activities Start -->
+      <h2 class="mb-4 text-lg font-bold tracking-tight">Rooms hosted by {{ p_user.name|default:p_user.username }}</h2>
+      {% include 'base/feed_component.html' %}
+    </section>
+
+    <aside class="hidden xl:block">
       {% include 'base/activity_component.html' %}
-      <!-- Activities End -->
-    </div>
-  </main>
-
+    </aside>
+  </div>
+</div>
 {% endblock %}

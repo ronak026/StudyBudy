@@ -1,41 +1,38 @@
 {% extends 'main.html' %}
-
 {% block start %}
-    <main class="create-room layout">
-      <div class="container">
-        <div class="layout__box card animate-fadein-up">
-          <div class="layout__boxHeader">
-            <div class="layout__boxTitle">
-              <a href="{% url 'home' %}" aria-label="Back to home">
-                <span class="material-symbols-rounded" aria-hidden="true">arrow_back</span>
-              </a>
-              <h3>Browse Topics</h3>
-            </div>
-          </div>
-
-          <div class="topics-page layout__body">
-            <form class="header__search" method="GET" action="" role="search">
-              <label>
-                <span class="visually-hidden">Search topics</span>
-                <span class="material-symbols-rounded" aria-hidden="true">search</span>
-                <input name="q" placeholder="Search for topics" aria-label="Search topics" />
-              </label>
-            </form>
-
-            <ul class="topics__list scroll">
-              <li>
-                <a href="{% url 'topic' %}" class="active">All <span>{{ topics.count }}</span></a>
-              </li>
-              {% for topic in topics %}
-                <li>
-                  <a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }} <span>{{ topic.room_set.all.count }}</span></a>
-                </li>
-              {% empty %}
-                <li class="empty-state">No topics found.</li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </main>
+<div class="mx-auto max-w-2xl px-4 py-10">
+  <div class="card animate-fade-up overflow-hidden">
+    <div class="flex items-center gap-2 border-b border-gray-200 px-6 py-5 dark:border-zinc-800">
+      <a href="{% url 'home' %}" class="icon-btn" aria-label="Back to home">
+        <span class="material-symbols-rounded text-[22px]" aria-hidden="true">arrow_back</span>
+      </a>
+      <h1 class="text-lg font-bold">Browse Topics</h1>
+    </div>
+    <div class="p-6">
+      <form method="GET" action="" role="search" class="mb-5">
+        <label class="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 focus-within:border-indigo-500 dark:border-zinc-700 dark:bg-zinc-800">
+          <span class="material-symbols-rounded text-[20px] text-gray-400" aria-hidden="true">search</span>
+          <input name="q" placeholder="Search for topics..." aria-label="Search topics" class="w-full bg-transparent py-2.5 text-sm focus:outline-none" />
+        </label>
+      </form>
+      <ul class="flex flex-col gap-0.5">
+        <li>
+          <a href="{% url 'home' %}" class="sidebar-link bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">
+            All <span class="rounded-full bg-white px-2 py-0.5 text-xs dark:bg-zinc-800">{{ topics.count }}</span>
+          </a>
+        </li>
+        {% for topic in topics %}
+        <li>
+          <a href="{% url 'home' %}?q={{ topic.name }}" class="sidebar-link">
+            <span class="truncate">{{ topic.name }}</span>
+            <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-zinc-800 dark:text-zinc-400">{{ topic.room_set.all.count }}</span>
+          </a>
+        </li>
+        {% empty %}
+        <li class="px-3 py-2 text-sm text-gray-400">No topics found.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
 {% endblock %}

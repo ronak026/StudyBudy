@@ -1,58 +1,41 @@
-{% extends 'main.html' %} {% block start %}
-<main class="layout">
-  <div class="container">
-    <div class="layout__box">
-      <div class="layout__boxHeader">
-        <div class="layout__boxTitle">
-          <a href="{% url 'home' %}" aria-label="Back to home">
-            <span class="material-symbols-rounded" aria-hidden="true">arrow_back</span>
+{% extends 'main.html' %}
+{% block start %}
+<div class="mx-auto max-w-2xl px-4 py-10">
+  <div class="card animate-fade-up overflow-hidden">
+    <div class="flex items-center gap-2 border-b border-gray-200 px-6 py-5 dark:border-zinc-800">
+      <a href="{% url 'home' %}" class="icon-btn" aria-label="Back to home">
+        <span class="material-symbols-rounded text-[22px]" aria-hidden="true">arrow_back</span>
+      </a>
+      <h1 class="text-lg font-bold">Recent Activity</h1>
+    </div>
+    <div class="flex flex-col gap-4 p-6">
+      {% for message in room_message %}
+      <div class="border-b border-gray-100 pb-4 last:border-0 last:pb-0 dark:border-zinc-800">
+        <div class="mb-1.5 flex items-center justify-between">
+          <a href="{% url 'user-profile' message.user.id %}" class="flex items-center gap-2">
+            <span class="h-8 w-8 overflow-hidden rounded-full bg-gray-200 dark:bg-zinc-700">
+              <img src="{{ message.user.avatar.url }}" alt="{{ message.user }} avatar" class="h-full w-full object-cover" />
+            </span>
+            <span class="leading-tight">
+              <span class="block text-sm font-semibold text-gray-900 dark:text-zinc-100">@{{ message.user }}</span>
+              <span class="block text-xs text-gray-400 dark:text-zinc-500">{{ message.created|timesince }} ago</span>
+            </span>
           </a>
-          <h3>Recent Activities</h3>
+          {% if request.user == message.user %}
+          <a href="{% url 'delete-message' message.id %}" title="Delete message" aria-label="Delete message" class="icon-btn p-1 hover:text-rose-600">
+            <span class="material-symbols-rounded text-[18px]" aria-hidden="true">close</span>
+          </a>
+          {% endif %}
         </div>
+        <p class="text-sm text-gray-500 dark:text-zinc-400">
+          replied to <a href="{% url 'room' message.room.id %}" class="font-medium text-indigo-600 hover:underline dark:text-indigo-400">{{ message.room }}</a>
+        </p>
+        <p class="mt-1.5 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-600 dark:bg-zinc-800 dark:text-zinc-300">{{ message.body }}</p>
       </div>
-
-      <div class="activities-page layout__body">
-        {% for message in room_message %}
-        <div class="activities__box">
-          <div class="activities__boxHeader roomListRoom__header">
-            <a
-              href="{% url 'user-profile' message.user.id %}"
-              class="roomListRoom__author"
-            >
-              <div class="avatar avatar--small">
-                <img src="{{message.user.avatar.url}}" alt="{{ message.user }} avatar" />
-              </div>
-              <p>
-                @{{ message.user }}
-                <span> {{message.created|timesince }} ago</span>
-              </p>
-            </a>
-            {% if request.user == message.user %}
-            <div class="roomListRoom__actions">
-              <a href="{% url 'delete-message' message.id %}" title="Delete message" aria-label="Delete message">
-                <span class="material-symbols-rounded" aria-hidden="true">close</span>
-              </a>
-            </div>
-            {% endif %}
-          </div>
-          <div class="activities__boxContent">
-            <p>
-              replied to post “<a href="{% url 'room' message.room.id%}"
-                >{{message.room}}</a
-              >”
-            </p>
-            <div class="activities__boxRoomContent">{{message.body}}</div>
-          </div>
-        </div>
-        {% empty %}
-        <div class="empty-state">
-          <span class="material-symbols-rounded" aria-hidden="true">history</span>
-          No recent activity yet.
-        </div>
-        {% endfor %}
-      </div>
+      {% empty %}
+      <p class="py-10 text-center text-sm text-gray-400">No recent activity yet.</p>
+      {% endfor %}
     </div>
   </div>
-</main>
-
+</div>
 {% endblock %}

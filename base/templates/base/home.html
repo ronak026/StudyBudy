@@ -1,53 +1,47 @@
 {% extends 'main.html' %}
-
 {% block start %}
+<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)_19rem]">
 
-<main class="layout layout--3">
-  <div class="container">
+    <!-- Topics sidebar -->
+    <aside class="hidden lg:block">
+      {% include 'base/topic_component.html' %}
+    </aside>
 
-    <!-- Topics Start -->
-    {% include 'base/topic_component.html' %}
-
-    <!-- Topics End -->
-
-    <!-- Room List Start -->
-    <div class="roomList">
-      <div class="mobile-menu">
-        <form action="{% url 'home' %}" method="GET" class="header__search" role="search">
-          <label>
-            <span class="visually-hidden">Search rooms</span>
-            <span class="material-symbols-rounded" aria-hidden="true">search</span>
-            <input name="q" placeholder="Search for posts" aria-label="Search rooms" />
+    <!-- Room list -->
+    <section class="min-w-0">
+      <!-- Mobile search + quick links -->
+      <div class="mb-5 flex flex-col gap-3 lg:hidden">
+        <form method="GET" action="{% url 'home' %}" role="search">
+          <label class="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 dark:border-zinc-700 dark:bg-zinc-900">
+            <span class="material-symbols-rounded text-[20px] text-gray-400" aria-hidden="true">search</span>
+            <input name="q" placeholder="Search rooms..." aria-label="Search rooms" class="w-full bg-transparent py-2.5 text-sm focus:outline-none" />
           </label>
         </form>
-        <div class="mobile-menuItems">
-          <a class="btn btn--main btn--pill" href="{% url 'topic' %}">Browse Topics</a>
-          <a class="btn btn--main btn--pill" href="{% url 'activity' %}">Recent Activities</a>
+        <div class="flex gap-2">
+          <a class="btn btn-primary flex-1" href="{% url 'topic' %}">Browse Topics</a>
+          <a class="btn flex-1" href="{% url 'activity' %}">Recent Activity</a>
         </div>
       </div>
 
-      <div class="roomList__header">
+      <div class="mb-5 flex items-center justify-between gap-4">
         <div>
-          <h2>Study Rooms</h2>
-          <p>{{room_count}} Rooms available</p>
+          <h1 class="text-2xl font-bold tracking-tight">Study Rooms</h1>
+          <p class="text-sm text-gray-500 dark:text-zinc-400">{{ room_count }} room{{ room_count|pluralize }} available</p>
         </div>
-
-        <a class="btn btn--main" href="{% url 'create-room' %}">
-          <span class="material-symbols-rounded" aria-hidden="true">add</span>
-          Create Room
+        <a class="btn btn-primary" href="{% url 'create-room' %}">
+          <span class="material-symbols-rounded text-[20px]" aria-hidden="true">add</span>
+          <span class="hidden sm:inline">Create Room</span>
         </a>
       </div>
 
       {% include 'base/feed_component.html' %}
+    </section>
 
-    </div>
-    <!-- Room List End -->
-
-    <!-- Activities Start -->
-    {% include 'base/activity_component.html' %}
-
-    <!-- Activities End -->
+    <!-- Activity sidebar -->
+    <aside class="hidden xl:block">
+      {% include 'base/activity_component.html' %}
+    </aside>
   </div>
-</main>
-
+</div>
 {% endblock %}

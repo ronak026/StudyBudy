@@ -1,25 +1,25 @@
-<div class="topics card animate-fadein-up">
-  <div class="topics__header">
-    <h2>Browse Topics</h2>
-  </div>
-  <ul class="topics__list scroll">
+<div class="card sticky top-20 animate-fade-in p-5">
+  <h2 class="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-zinc-500">Browse Topics</h2>
+  <ul class="flex flex-col gap-0.5">
     <li>
-      <a href="{% url 'home' %}" class="active"
-        >All <span>{{ total_rooms }}</span></a
-      >
+      <a href="{% url 'home' %}" class="sidebar-link bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">
+        All
+        <span class="rounded-full bg-white px-2 py-0.5 text-xs text-indigo-700 dark:bg-zinc-800 dark:text-indigo-300">{{ total_rooms }}</span>
+      </a>
     </li>
     {% for topic in topics %}
     <li>
-      <a href="{% url 'home' %}?q={{topic.name}}"
-        >{{ topic.name }}<span>{{topic.room_set.all.count}}</span></a
-      >
+      <a href="{% url 'home' %}?q={{ topic.name }}" class="sidebar-link">
+        <span class="truncate">{{ topic.name }}</span>
+        <span class="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-zinc-800 dark:text-zinc-400">{{ topic.room_set.all.count }}</span>
+      </a>
     </li>
     {% empty %}
-    <li class="empty-state">No topics yet.</li>
+    <li class="px-3 py-2 text-sm text-gray-400">No topics yet.</li>
     {% endfor %}
-    <a class="btn btn--link" href="{% url 'topic' %}">
-      More
-      <span class="material-symbols-rounded" aria-hidden="true">expand_more</span>
-    </a>
   </ul>
+  <a class="mt-2 flex items-center gap-1 px-3 py-2 text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400" href="{% url 'topic' %}">
+    More
+    <span class="material-symbols-rounded text-[18px]" aria-hidden="true">expand_more</span>
+  </a>
 </div>

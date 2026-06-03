@@ -52,12 +52,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tailwind',
+    'theme',
     'base',
     'rest_framework',
     "corsheaders",
 ]
 
 AUTH_USER_MODEL = 'base.User'
+
+# django-tailwind
+TAILWIND_APP_NAME = 'theme'
+NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', r'C:\laragon\bin\nodejs\node-v22\npm.cmd')
+INTERNAL_IPS = ['127.0.0.1']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,69 +1,53 @@
 {% extends 'main.html' %}
 {% block start %}
-<main class="auth layout">
-  {% if page == 'login' %}
-  <div class="container">
-    <div class="layout__box">
-      <div class="layout__boxHeader">
-        <div class="layout__boxTitle">
-          <h3>Login</h3>
+<div class="mx-auto flex max-w-md flex-col px-4 py-10 sm:py-16">
+  <div class="card animate-fade-up overflow-hidden">
+    <div class="border-b border-gray-200 px-6 py-5 dark:border-zinc-800">
+      <h1 class="text-xl font-bold">{% if page == 'login' %}Welcome back{% else %}Create your account{% endif %}</h1>
+      <p class="mt-1 text-sm text-gray-500 dark:text-zinc-400">Find your study partner</p>
+    </div>
+    <div class="p-6">
+      {% if page == 'login' %}
+      <form class="flex flex-col gap-4" action="" method="POST">
+        {% csrf_token %}
+        <div>
+          <label for="email" class="field-label">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" class="input" />
         </div>
-      </div>
-      <div class="layout__body">
-        <h2 class="auth__tagline">Find your study partner</h2>
-        <form class="form" action="" method="POST">
-          {% csrf_token %}
-          <div class="form__group">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="Email" autocomplete="email" />
-          </div>
-          <div class="form__group">
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password" />
-          </div>
-          <button class="btn btn--main" type="submit">
-            <span class="material-symbols-rounded" aria-hidden="true">lock</span>
-            Login
-          </button>
-        </form>
-        <div class="auth__action">
-          <p>Haven't signed up yet?</p>
-          <a href="{% url 'register' %}" class="btn btn--link">Sign Up</a>
+        <div>
+          <label for="password" class="field-label">Password</label>
+          <input id="password" name="password" type="password" placeholder="••••••••" autocomplete="current-password" class="input" />
         </div>
-      </div>
+        <button class="btn btn-primary mt-1 w-full" type="submit">
+          <span class="material-symbols-rounded text-[20px]" aria-hidden="true">lock</span>
+          Log in
+        </button>
+      </form>
+      <p class="mt-5 border-t border-gray-200 pt-4 text-center text-sm text-gray-500 dark:border-zinc-800 dark:text-zinc-400">
+        Haven't signed up yet?
+        <a href="{% url 'register' %}" class="font-medium text-indigo-600 hover:underline dark:text-indigo-400">Sign up</a>
+      </p>
+      {% else %}
+      <form class="flex flex-col gap-4" action="" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}" class="field-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<small class="mt-1 block text-sm text-rose-600">{{ field.errors|striptags }}</small>{% endif %}
+        </div>
+        {% endfor %}
+        <button class="btn btn-primary mt-1 w-full" type="submit">
+          <span class="material-symbols-rounded text-[20px]" aria-hidden="true">person_add</span>
+          Create account
+        </button>
+      </form>
+      <p class="mt-5 border-t border-gray-200 pt-4 text-center text-sm text-gray-500 dark:border-zinc-800 dark:text-zinc-400">
+        Already signed up?
+        <a href="{% url 'login' %}" class="font-medium text-indigo-600 hover:underline dark:text-indigo-400">Log in</a>
+      </p>
+      {% endif %}
     </div>
   </div>
-  {% else %}
-  <div class="container">
-    <div class="layout__box">
-      <div class="layout__boxHeader">
-        <div class="layout__boxTitle">
-          <h3>Register</h3>
-        </div>
-      </div>
-      <div class="layout__body">
-        <h2 class="auth__tagline">Find your study partner</h2>
-        <form class="form" action="" method="POST">
-          {% csrf_token %}
-          {% for field in form %}
-          <div class="form__group">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}<small class="form__error">{{ field.errors|striptags }}</small>{% endif %}
-          </div>
-          {% endfor %}
-          <button class="btn btn--main" type="submit">
-            <span class="material-symbols-rounded" aria-hidden="true">lock</span>
-            Register
-          </button>
-        </form>
-        <div class="auth__action">
-          <p>Already signed up?</p>
-          <a href="{% url 'login' %}" class="btn btn--link">Login</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-</main>
+</div>
 {% endblock %}
